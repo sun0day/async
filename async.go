@@ -16,6 +16,10 @@ type AsyncTask[V any] struct {
 	state   AsyncState
 }
 
+func (t *AsyncTask[V]) Value() V {
+	return t.value
+}
+
 func Async[V any](f func() V) func() *AsyncTask[V] {
 	exec := func() *AsyncTask[V] {
 		task := &AsyncTask[V]{
