@@ -11,13 +11,9 @@ const (
 type AsyncTask[V any] struct {
 	valueCh chan V
 	errCh   chan any
-	value   V
-	err     any
-	state   AsyncState
-}
-
-func (t *AsyncTask[V]) Value() V {
-	return t.value
+	Value   V
+	Err     any
+	State   AsyncState
 }
 
 func Async[V any](f func() V) func() *AsyncTask[V] {
@@ -25,19 +21,19 @@ func Async[V any](f func() V) func() *AsyncTask[V] {
 		task := &AsyncTask[V]{
 			valueCh: make(chan V, 1),
 			errCh:   make(chan any, 1),
-			state:   PENDING,
+			State:   PENDING,
 		}
 
 		go func() {
 			var result V
 			defer func() {
 				if e := recover(); e == nil {
-					task.state = FULFILLED
-					task.value = result
+					task.State = FULFILLED
+					task.Value = result
 					task.valueCh <- result
 				} else {
-					task.state = REJECTED
-					task.err = e
+					task.State = REJECTED
+					task.Err = e
 					task.errCh <- e
 				}
 				close(task.valueCh)
@@ -57,7 +53,7 @@ func Await[V any](t *AsyncTask[V]) (V, any) {
 	var value V
 	var err any
 
-	switch t.state {
+	switch t.State {
 	default:
 		select {
 		case err = <-t.errCh:
@@ -66,9 +62,9 @@ func Await[V any](t *AsyncTask[V]) (V, any) {
 			return value, err
 		}
 	case FULFILLED:
-		return t.value, err
+		return t.Value, err
 	case REJECTED:
-		return value, t.err
+		return value, t.Err
 	}
 
 }
