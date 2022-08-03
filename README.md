@@ -220,5 +220,10 @@ func main() {
   fmt.Printf("race result=%d\n", value)
   fmt.Printf("sync end, goroutine=%d\n", runtime.NumGoroutine())
 }
+/* stdout
+sync start, goroutine=1
+race result=3
+sync end, goroutine=2
+*/
 ```
 
