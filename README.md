@@ -46,20 +46,20 @@ import (
 )
 
 func main() {
-	a := 1
-	b := 2
-	f := func() int {
-		c := a + b
-		fmt.Printf("async result=%d\n", c)
-		return c
-	}
+  a := 1
+  b := 2
+  f := func() int {
+    c := a + b
+    fmt.Printf("async result=%d\n", c)
+    return c
+  }
 
-	af := async.Async[int](f)
+  af := async.Async[int](f)
 
-	fmt.Printf("sync start, goroutine=%d\n", runtime.NumGoroutine())
-	af()
-	fmt.Printf("sync end, goroutine=%d\n", runtime.NumGoroutine())
-	time.Sleep(1 * time.Second)
+  fmt.Printf("sync start, goroutine=%d\n", runtime.NumGoroutine())
+  af()
+  fmt.Printf("sync end, goroutine=%d\n", runtime.NumGoroutine())
+  time.Sleep(1 * time.Second)
   fmt.Printf("async end, goroutine=%d\n", runtime.NumGoroutine())
 }
 
@@ -87,32 +87,32 @@ func Await[V any](t *AsyncTask[V]) (V, any) {...}
 package main
 
 import (
-	"fmt"
-	"runtime"
-	"github.com/sun0day/async"
+  "fmt"
+  "runtime"
+  "github.com/sun0day/async"
 )
 
 func main() {
-	a := 1
-	b := 2
-	f1 := func() int {
-		c := a + b
-		return c
-	}
+  a := 1
+  b := 2
+  f1 := func() int {
+    c := a + b
+    return c
+  }
 
-	f2 := func() int {
-		panic("f() error")
-	}
+  f2 := func() int {
+    panic("f() error")
+  }
 
-	af1 := async.Async[int](f1)
-	af2 := async.Async[int](f2)
+  af1 := async.Async[int](f1)
+  af2 := async.Async[int](f2)
 
-	fmt.Printf("sync start, goroutine=%d\n", runtime.NumGoroutine())
-	value, _ := async.Await[int](af1())
-	_, err := async.Await[int](af2())
-	fmt.Printf("af1 result=%d\n", value)
-	fmt.Printf("af2 error=%s\n", err)
-	fmt.Printf("sync end, goroutine=%d\n", runtime.NumGoroutine())
+  fmt.Printf("sync start, goroutine=%d\n", runtime.NumGoroutine())
+  value, _ := async.Await[int](af1())
+  _, err := async.Await[int](af2())
+  fmt.Printf("af1 result=%d\n", value)
+  fmt.Printf("af2 error=%s\n", err)
+  fmt.Printf("sync end, goroutine=%d\n", runtime.NumGoroutine())
 }
 /* stdout
 sync start, goroutine=1
@@ -138,37 +138,37 @@ func All[V any](fs []func() V) *AsyncTask[[]V] {...}
 package main
 
 import (
-	"fmt"
-	"runtime"
-	"time"
-	"github.com/sun0day/async"
+  "fmt"
+  "runtime"
+  "time"
+  "github.com/sun0day/async"
 )
 
 func main() {
-	a := 1
-	b := 2
-	f1 := func() int {
-		time.Sleep(1 * time.Second)
-		c := a + b
-		return c
-	}
+  a := 1
+  b := 2
+  f1 := func() int {
+    time.Sleep(1 * time.Second)
+    c := a + b
+    return c
+  }
 
-	f2 := func() int {
-		time.Sleep(2 * time.Second)
-		c := a * b
-		return c
-	}
+  f2 := func() int {
+    time.Sleep(2 * time.Second)
+    c := a * b
+    return c
+  }
 
-	f3 := func() int {
-		panic("f3 error")
-	}
+  f3 := func() int {
+    panic("f3 error")
+  }
 
-	fmt.Printf("sync start, goroutine=%d\n", runtime.NumGoroutine())
-	values, _ := async.Await[[]int](async.All[int]([]func() int{f1, f2}))
-	_, err := async.Await[[]int](async.All[int]([]func() int{f1, f2, f3}))
-	fmt.Printf("all result=%v\n", values)
-	fmt.Printf("all error=%s\n", err)
-	fmt.Printf("sync end, goroutine=%d\n", runtime.NumGoroutine())
+  fmt.Printf("sync start, goroutine=%d\n", runtime.NumGoroutine())
+  values, _ := async.Await[[]int](async.All[int]([]func() int{f1, f2}))
+  _, err := async.Await[[]int](async.All[int]([]func() int{f1, f2, f3}))
+  fmt.Printf("all result=%v\n", values)
+  fmt.Printf("all error=%s\n", err)
+  fmt.Printf("sync end, goroutine=%d\n", runtime.NumGoroutine())
 }
 /* stdout
 sync start, goroutine=1
@@ -194,31 +194,31 @@ func Race[V any](fs []func() V) *AsyncTask[V] {...}
 package main
 
 import (
-	"fmt"
-	"runtime"
-	"time"
-	"github.com/sun0day/async"
+  "fmt"
+  "runtime"
+  "time"
+  "github.com/sun0day/async"
 )
 
 func main() {
-	a := 1
-	b := 2
-	f1 := func() int {
-		time.Sleep(1 * time.Second)
-		c := a + b
-		return c
-	}
+  a := 1
+  b := 2
+  f1 := func() int {
+    time.Sleep(1 * time.Second)
+    c := a + b
+    return c
+  }
 
-	f2 := func() int {
-		time.Sleep(2 * time.Second)
-		c := a * b
-		return c
-	}
+  f2 := func() int {
+    time.Sleep(2 * time.Second)
+    c := a * b
+    return c
+  }
 
-	fmt.Printf("sync start, goroutine=%d\n", runtime.NumGoroutine())
-	value, _ := async.Await[int](async.Race[int]([]func() int{f1, f2}))
-	fmt.Printf("race result=%d\n", value)
-	fmt.Printf("sync end, goroutine=%d\n", runtime.NumGoroutine())
+  fmt.Printf("sync start, goroutine=%d\n", runtime.NumGoroutine())
+  value, _ := async.Await[int](async.Race[int]([]func() int{f1, f2}))
+  fmt.Printf("race result=%d\n", value)
+  fmt.Printf("sync end, goroutine=%d\n", runtime.NumGoroutine())
 }
 ```
 
