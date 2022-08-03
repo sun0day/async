@@ -1,6 +1,6 @@
 # async
 
-A ES7-style async/await implementation lib in Golang.
+A ES7-style async/await implementation lib based on Goroutine + Channel in Golang.
 
 ## Install
 
