@@ -22,7 +22,10 @@ type AsyncTask[V any] struct {
 }
 ```
 
-`async.AsyncTask.State` has 3 values: `async.PENDING`(`async.AsyncTask` is doing), `async.FULFILLED`(`async.AsyncTask` is done and result returns), `async.REJECTED`(`async.AsyncTask` is done but error happens). 
+`async.AsyncTask.State` has 3 values: 
+- `async.PENDING`(`async.AsyncTask` is doing)
+- `async.FULFILLED`(`async.AsyncTask` is done and result returns)
+- `async.REJECTED`(`async.AsyncTask` is done but error happens). 
 
 ### `async.Async`
 
